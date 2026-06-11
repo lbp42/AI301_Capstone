@@ -78,30 +78,42 @@ Various C++ source files across the codebase wherever strncpy_s appears.
 
 ### Analysis
 
-[Your analysis of the root cause - what's causing the issue?]
+The issue is the inconsistent use of the project's own cross-platform string 
+copy wrapper. `strncpy_s` is a Windows-specific function, but it is being 
+called directly in several files. 
+Instead of using the existing `util::platform::StringCopy` wrapper (defined in `framework/util/platform.h`). 
+This wrapper was created specifically to handle cross-platform compatibility but is not being used consistently.
 
 ### Proposed Solution
 
-[High-level description of your fix approach]
+Replace all direct calls to `strncpy_s` with `gfxrecon::util::platform::StringCopy` 
+across the affected files. This is a direct 1:1 swap as noted by the maintainer 
+in the issue.
 
 ### Implementation Plan
 
 Using UMPIRE framework (adapted):
 
-**Understand:** [Restate the problem]
+**Understand:** The codebase has a cross-platform string copy wrapper 
+`util::platform::StringCopy` but 12 places in the code still use the 
+Windows-only `strncpy_s` directly. 
 
-**Match:** [What similar patterns/solutions exist in the codebase?]
+**Match:** The wrapper already exists in `framework/util/platform.h` and 
+takes the same arguments as `strncpy_s`, making this a direct replacement.
 
 **Plan:** [Step-by-step implementation plan]
-1. [Modify file X to do Y]
-2. [Add function Z]
-3. [Update tests]
+1. Modify `framework/util/file_path.cpp` and replace 8 instances of `strncpy_s`
+2. Modify `framework/util/driver_info.cpp` and replace 2 instances 
+3. Modify `framework/encode/d3d12_capture_manager.cpp` and replace 2 instances
+4. Leave `framework/util/platform.h` as is (this is the wrapper def itself)
 
-**Implement:** [Link to your branch/commits as you work]
+**Implement:** [[Link to your branch/commits as you work](https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358)]]
 
-**Review:** [Self-review checklist - does it follow the project's contribution guidelines?]
+**Review:** Will follow CONTRIBUTING.md guidelines for commit messages and format.
 
-**Evaluate:** [How will you verify it works?]
+**Evaluate:** Rebuild the project with `make -j4` after changes and confirm 
+it compiles with no errors. Run grep again to confirm zero remaining instances 
+of `strncpy_s` outside of `platform.h`.
 
 ---
 
