@@ -5,7 +5,7 @@
 **Contribution Number:** [1 ]  
 **Student:** [Amanda Orozco]  
 **Issue:** [[GitHub issue link](https://github.com/LunarG/gfxreconstruct/issues/1358)]  
-**Status:** [Phase I ]
+**Status:** [Phase II ]
 
 ---
 
@@ -49,19 +49,28 @@ Various C++ source files across the codebase wherever strncpy_s appears.
 
 ### Environment Setup
 
-[Notes on setting up your local development environment - challenges you faced, how you solved them]
+- Cloned fork on macOS (Apple Silicon)
+- Installed Xcode Command Line Tools, CMake via Homebrew
+- Initialized git submodules with `git submodule update --init`
+- Built project with `cmake . -Bbuild -DCMAKE_OSX_ARCHITECTURES="arm64"` and `make -j4`
+- Set up SSH authentication for GitHub
 
 ### Steps to Reproduce
 
-1. [Step 1]
-2. [Step 2]
-3. [Observed result]
+1. Clone the repository
+2. Run `grep -r "strncpy_s" --include="*.cpp" --include="*.h" .` from the project root
+3. Observed 12 instances of `strncpy_s` across 4 files instead of the wrapper `util::platform::StringCopy`
 
 ### Reproduction Evidence
 
-- **Commit showing reproduction:** [Link to commit in your fork]
+- **Commit showing reproduction:** (https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358)
 - **Screenshots/logs:** [If applicable]
-- **My findings:** [What you discovered during reproduction]
+- **My findings:** - When running `grep -r "strncpy_s" --include="*.cpp" --include="*.h" .` from  
+ root it revealed 12 instances of `strncpy_s` across 4 files:
+    - `framework/util/file_path.cpp` — 8 instances
+    - `framework/util/driver_info.cpp` — 2 instances  
+    - `framework/encode/d3d12_capture_manager.cpp` — 2 instances
+    - `framework/util/platform.h` — 1 instance ( wrapper defined here DO NOT be change)
 
 ---
 
