@@ -5,14 +5,11 @@
 **Contribution Number:** [1 ]  
 **Student:** [Amanda Orozco]  
 **Issue:** [[GitHub issue link](https://github.com/LunarG/gfxreconstruct/issues/1358)]  
-**Status:** [Phase II ]
+**Status:** [Phase III ]
 
 ---
 
 ## Why I Chose This Issue
-
-[1-2 paragraphs explaining why this issue interests you, how it matches your skills/learning goals, what you hope to learn]
-
 ---
 
 I chose this issue as the find and replace issue is across the entire codebase, so I'm given the opprotunity to contribute to an open source but without the complexicity of learning every 
@@ -23,25 +20,19 @@ security repercussions.
 
 ### Problem Description
 
-[In your own words, what's broken or missing?]
-
-The issue is that strncpy_s is still being used rather than the wrapper.  A string copy wrapper named uitil::platform::StringCopy is inconsistent within the codebase,
+The issue is that strncpy_s is still being used rather than the wrapper.  A string copy wrapper named util::platform::StringCopy is inconsistent within the codebase,
 thus causing compatibility issues on Mac and Linux. 
 
 ### Expected Behavior
 
-[What should happen?]
 Every instance of strncpy_s in the codebase should be replaced with util::platform::StringCopy so the code is consistent.
 ### Current Behavior
-
-[What actually happens?]
 
 strncpy_s is used directly in multiple places throughout the codebase instead 
 of going through the wrapper.
 
 ### Affected Components
 
-[Which parts of the codebase are involved?]
 Various C++ source files across the codebase wherever strncpy_s appears.
 ---
 
@@ -121,36 +112,45 @@ of `strncpy_s` outside of `platform.h`.
 
 ### Unit Tests
 
-- [ ] Test case 1: [Description]
-- [ ] Test case 2: [Description]
-- [ ] Test case 3: [Description]
-
+- This refactor has no behavior change so no new unit tests were required
+- Existing build passing confirms correctness of the replacement
+  
 ### Integration Tests
 
-- [ ] Integration scenario 1
-- [ ] Integration scenario 2
+- Not applicable for this change — this is a pure refactor with no 
+  behavior change. The existing build passing serves as integration 
+  validation since the project compiles and links successfully with 
+  the new function calls.
 
 ### Manual Testing
 
-[What you tested manually and results]
+- Ran `grep -r "strncpy_s" --include="*.cpp" --include="*.h" .` before 
+  and after changes to confirm all instances were replaced
+- Rebuilt project with `make -j4` — compiled successfully with zero errors
+- Only remaining `strncpy_s` is inside `platform.h` which is the wrapper 
+  definition itself and is expected
 
 ---
 
 ## Implementation Notes
 
-### Week [X] Progress
+### Week [3] Progress
 
-[What you built this week, challenges faced, decisions made]
+Replaced all 12 instances of `strncpy_s` with `gfxrecon::util::platform::StringCopy` 
+across 3 files using VSCode's Find and Replace. Rebuilt the project successfully 
+with no errors after the changes.
 
-### Week [Y] Progress
-
-[Continue documenting as you work]
 
 ### Code Changes
 
-- **Files modified:** [List]
-- **Key commits:** [Links to important commits]
-- **Approach decisions:** [Why you chose certain approaches]
+- **Files modified:** 
+  - `framework/util/file_path.cpp` (8 replacements)
+  - `framework/util/driver_info.cpp` (2 replacements)
+  - `framework/encode/d3d12_capture_manager.cpp` (2 replacements)
+- **Key commits:** https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358
+- **Approach decisions:** Used VSCode Find and Replace for accuracy. 
+  Confirmed `platform.h` wrapper takes identical arguments so no 
+  additional changes were needed.
 
 ---
 
@@ -186,6 +186,5 @@ of `strncpy_s` outside of `platform.h`.
 
 ## Resources Used
 
-- [Link to helpful documentation]
-- [Tutorial or Stack Overflow post that helped]
-- [GitHub issues or discussions that helped]
+- [GFXReconstruct GitHub Issue #1358](https://github.com/LunarG/gfxreconstruct/issues/1358)
+- [GFXReconstruct CONTRIBUTING.md](https://github.com/LunarG/gfxreconstruct/blob/dev/CONTRIBUTING.md)
