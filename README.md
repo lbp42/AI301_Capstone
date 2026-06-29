@@ -4,8 +4,8 @@
 
 **Contribution Number:** [1 ]  
 **Student:** [Amanda Orozco]  
-**Issue:** [[GitHub issue link](https://github.com/LunarG/gfxreconstruct/issues/1358)]  
-**Status:** [Phase III ]
+**Issue:** [[GitHub issue](https://github.com/LunarG/gfxreconstruct/issues/1358)]  
+**Status:** [Phase IV ]
 
 ---
 
@@ -54,8 +54,7 @@ Various C++ source files across the codebase wherever strncpy_s appears.
 
 ### Reproduction Evidence
 
-- **Commit showing reproduction:** (https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358)
-- **Screenshots/logs:** [If applicable]
+- **Commit showing reproduction:** [[Reproduction](https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358)]
 - **My findings:** - When running `grep -r "strncpy_s" --include="*.cpp" --include="*.h" .` from  
  root it revealed 12 instances of `strncpy_s` across 4 files:
     - `framework/util/file_path.cpp` — 8 instances
@@ -98,7 +97,7 @@ takes the same arguments as `strncpy_s`, making this a direct replacement.
 3. Modify `framework/encode/d3d12_capture_manager.cpp` and replace 2 instances
 4. Leave `framework/util/platform.h` as is (this is the wrapper def itself)
 
-**Implement:** [[Link to your branch/commits as you work](https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358)]]
+**Implement:** [[Branch](https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358)]
 
 **Review:** Will follow CONTRIBUTING.md guidelines for commit messages and format.
 
@@ -147,7 +146,7 @@ with no errors after the changes.
   - `framework/util/file_path.cpp` (8 replacements)
   - `framework/util/driver_info.cpp` (2 replacements)
   - `framework/encode/d3d12_capture_manager.cpp` (2 replacements)
-- **Key commits:** https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358
+- **Key commits:** [[Commits](https://github.com/lbp42/gfxreconstruct/tree/fix-issue-1358)]
 - **Approach decisions:** Used VSCode Find and Replace for accuracy. 
   Confirmed `platform.h` wrapper takes identical arguments so no 
   additional changes were needed.
@@ -156,15 +155,16 @@ with no errors after the changes.
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when submitted]
+**PR Link:** [[PR](https://github.com/LunarG/gfxreconstruct/pull/3056)]
 
-**PR Description:** [Draft or final PR description - much of the content above can be adapted]
+**PR Description:** 
+Replaced all direct calls to `strncpy_s` with the existing cross-platform wrapper `gfxrecon::util::platform::StringCopy` across 3 files to address issue #1358.
 
 **Maintainer Feedback:**
-- [Date]: [Summary of feedback received]
+- [06/28/2026]: Awaiting review 
 - [Date]: [How you addressed it]
 
-**Status:** [Awaiting review / Iterating / Approved / Merged]
+**Status:** Awaiting review 
 
 ---
 
