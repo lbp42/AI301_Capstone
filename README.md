@@ -129,6 +129,18 @@ of `strncpy_s` outside of `platform.h`.
 - Only remaining `strncpy_s` is inside `platform.h` which is the wrapper 
   definition itself and is expected
 
+  
+**Before — 12 instances of `strncpy_s` found across 4 files:**
+<img width="1010" height="189" alt="Before fix - grep showing 12 instances of strncpy_s" src="https://github.com/user-attachments/assets/430f3098-66a1-4d42-96a2-766553e4c461" />
+
+**After — only the wrapper definition in `platform.h` remains:**
+<img width="773" height="777" alt="After fix - grep showing only the platform.h wrapper" src="https://github.com/user-attachments/assets/27e980d8-60df-4eb6-8096-7091cf60bf42" />
+
+
+**Successful rebuild confirming no errors were introduced:**
+<img width="1216" height="54" alt="Successful rebuild with no errors" src="https://github.com/user-attachments/assets/dae654b9-49f4-41c3-a918-dc7077363ccd" />
+
+
 ---
 
 ## Implementation Notes
@@ -172,15 +184,16 @@ Replaced all direct calls to `strncpy_s` with the existing cross-platform wrappe
 
 ### Technical Skills Gained
 
-[What you learned technically]
+I got more comfortable setting up a C++ build environment from scratch on Apple Silicon — installing Xcode Command Line Tools, CMake via Homebrew, initializing submodules, and configuring the right architecture flags. I also practiced verifying a refactor's correctness through tooling (grep) rather than unit tests, since this change had no behavior difference to test directly.
 
 ### Challenges Overcome
 
-[What was hard and how you solved it]
+Getting the build working locally took some troubleshooting, since a few dependencies (Vulkan, Metal tools, jsoncpp) weren't found by CMake on macOS — though these turned out to be pre-existing warnings unrelated to my change, not blockers. The other challenge was confirming all 12 replacements matched the wrapper's exact argument order and types so nothing broke, which I verified by rebuilding after each batch of changes.
 
 ### What I'd Do Differently Next Time
 
-[Reflection on your process]
+I'd run the "before" grep and save that output right away, instead of having to check out an earlier commit later to reconstruct it — that would've saved time when documenting the change afterward.
+
 
 ---
 
